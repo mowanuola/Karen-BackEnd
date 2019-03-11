@@ -8,16 +8,18 @@ from api.bmi.views import calculateBMI
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    height = models.IntegerField(blank=True)
-    weight = models.IntegerField(blank=True)
-    age = models.IntegerField(blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    height = models.IntegerField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username
 
     def bmi(self):
-      return calculateBMI(self.height,self.weight)
+        return calculateBMI(self.height, self.weight)
 
 
 @receiver(post_save, sender=User)
@@ -32,26 +34,46 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Food(models.Model):
-    name =  models.CharField(max_length=50, blank=True)  
-    calories = models.IntegerField(blank=True)
-    bloodtype = models.CharField(max_length=50, blank=True, choices=(
-        ("a","A"),
-        ("b","B"),
-        ("ab","AB"),
-        ("o","O")
-        
+    name = models.CharField(max_length=50, blank=True)
+    calories = models.IntegerField()
+    bloodtype = models.CharField(max_length=50, choices=(
+        ("a", "A"),
+        ("b", "B"),
+        ("ab", "AB"),
+        ("o", "O")
+
     ))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
+
+
 class Disease(models.Model):
-    name = models.CharField(max_length=50, blank=True) 
+    name = models.CharField(max_length=50, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
+
+
 class Blacklist(models.Model):
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
-        
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'User with {} cannot take {}'.format(self.disease, self.food)
+
+
 class Diagnosis(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{} has {}'.format(self.user.username, self.disease)

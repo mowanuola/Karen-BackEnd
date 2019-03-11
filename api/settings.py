@@ -32,7 +32,7 @@ DEBUG = bool(int(os.getenv('DEBUG', False)))
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = bool(int(os.getenv('PRODUCTION', False)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

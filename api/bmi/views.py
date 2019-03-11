@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 def calculateBMI(height, weight):
     BMI = weight/((height/100)*(height/100))
