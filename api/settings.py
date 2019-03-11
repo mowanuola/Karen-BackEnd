@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Local Apps (Your project's apps)
     'api.core',
+    'api.bmi'
 ]
 
 MIDDLEWARE = [
