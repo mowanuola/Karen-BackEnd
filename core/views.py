@@ -13,19 +13,16 @@ from random import shuffle
 from core.forms import *
 
 
-class HelloView(APIView):
-    def get(self, request):
-        content = {'message': 'Hello, World!'}
-        return Response(content)
-
-
 class RegisterView(APIView):
     def post(self, request):
         form = RegisterForm(request.data or None)
         if form.is_valid():
             username = form.cleaned_data['username'].lower()
             email = form.cleaned_data['email'].lower()
-            user = User(username=username, email=email)
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            user = User(username=username, email=email,
+                        first_name=first_name, last_name=last_name)
             user.set_password(form.cleaned_data['password'])
             user.save()
             token = Token.objects.create(user=user)
@@ -35,9 +32,9 @@ class RegisterView(APIView):
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        token = Token.objects.get(user=user)
+        return Response(data={'token': token.key})
