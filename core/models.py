@@ -8,6 +8,7 @@ from core.bmi import calculateBMI
 class User(AbstractUser):
     height = models.IntegerField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
+    sex = models.CharField(blank=True, max_length=50)
     age = models.IntegerField(blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

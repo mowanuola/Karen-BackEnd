@@ -19,7 +19,7 @@ class RegisterForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username',
-                  'email', 'password', 'birth_date', 'height', 'weight', 'age']
+                  'email', 'password', 'birth_date', 'height', 'weight', 'age', 'sex']
         error_messages = {
             'first_name': {
                 'required': 'First name is required'
@@ -47,8 +47,12 @@ class RegisterForm(ModelForm):
             },
             'age': {
                 'required': 'Age is required'
+            },
+            'sex':{
+                'required': 'Sex is required'
+                }
             }
-        }
+        
 
     def clean(self):
         cleaned_data = super(RegisterForm, self).clean()

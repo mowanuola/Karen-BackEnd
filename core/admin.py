@@ -8,7 +8,7 @@ class UserAdmin(DUserAdmin):
     form = RegisterForm
     model = User
     list_display = ['first_name', 'last_name', 'username',
-                    'email', 'password', 'birth_date', 'height', 'weight', 'age']
+                    'email', 'password', 'birth_date', 'height', 'weight', 'age', 'sex', 'created_at', 'updated_at']
 
 
 admin.site.register(Food)

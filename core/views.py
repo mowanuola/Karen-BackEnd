@@ -21,12 +21,14 @@ class RegisterView(APIView):
             email = form.cleaned_data['email'].lower()
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
+            sex= form.cleaned_data['sex']
+            birth_date=form.cleaned_data['birth_date']
             user = User(username=username, email=email,
-                        first_name=first_name, last_name=last_name)
+                        first_name=first_name, last_name=last_name, birth_date=birth_date,sex=sex)
             user.set_password(form.cleaned_data['password'])
             user.save()
             token = Token.objects.create(user=user)
-            return Response(data={'token': token.key}, status=status.HTTP_201_CREATED)
+            return Response(data={'token': token.key, 'message':"User successfully registered"}, status=status.HTTP_201_CREATED)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
