@@ -9,7 +9,7 @@ from rest_framework.schemas import get_schema_view
 schema_view = get_schema_view(title='Karen API', renderer_classes=[
                               OpenAPIRenderer, SwaggerUIRenderer])
 urlpatterns = [
-    path('/docs', schema_view, name="docs"),
+    path('docs', schema_view, name="docs"),
     path('admin/', admin.site.urls),
     path('login', LoginView.as_view(), name="login"),
     path('register', RegisterView.as_view(), name='register'),
