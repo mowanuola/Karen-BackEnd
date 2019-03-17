@@ -21,14 +21,14 @@ class RegisterView(APIView):
             email = form.cleaned_data['email'].lower()
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            sex= form.cleaned_data['sex']
-            birth_date=form.cleaned_data['birth_date']
+            sex = form.cleaned_data['sex']
+            birth_date = form.cleaned_data['birth_date']
             user = User(username=username, email=email,
-                        first_name=first_name, last_name=last_name, birth_date=birth_date,sex=sex)
+                        first_name=first_name, last_name=last_name, birth_date=birth_date, sex=sex)
             user.set_password(form.cleaned_data['password'])
             user.save()
             token = Token.objects.create(user=user)
-            return Response(data={'token': token.key, 'message':"User successfully registered"}, status=status.HTTP_201_CREATED)
+            return Response(data={'token': token.key, 'message': "User successfully registered"}, status=status.HTTP_201_CREATED)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
@@ -40,3 +40,29 @@ class LoginView(ObtainAuthToken):
         user = serializer.validated_data['user']
         token = Token.objects.get(user=user)
         return Response(data={'token': token.key})
+
+
+class UserView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+class CalculateBMIView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        form = CalculateBMIForm(request.data or None)
+        if form.is_valid():
+            user = request.user
+            height = form.cleaned_data['height']
+            weight = form.cleaned_data['weight']
+            user.height = int(height)
+            user.weight = int(weight)
+            user.save()
+            serializer = UserSerializer(user)
+            return Response(data={'message': "Sucess", 'user': serializer.data})
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

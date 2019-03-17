@@ -5,10 +5,11 @@ from core.models import *
 
 
 class UserAdmin(DUserAdmin):
+    add_form = RegisterForm
     form = RegisterForm
     model = User
     list_display = ['first_name', 'last_name', 'username',
-                    'email', 'password', 'birth_date', 'height', 'weight', 'age', 'sex', 'created_at', 'updated_at']
+                    'email', 'password', 'birth_date', 'height', 'weight', 'age', 'sex', 'bloodtype', 'bmi', 'dci', 'created_at', 'updated_at']
 
 
 admin.site.register(Food)

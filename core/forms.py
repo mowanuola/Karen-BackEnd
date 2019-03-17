@@ -14,12 +14,17 @@ class RegisterForm(ModelForm):
                 code='invalid_username',
             )
         )
-        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['username'].required = True
+        self.fields['password'].required = True
+        self.fields['sex'].required = True
+        self.fields['birth_date'].required = True
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username',
-                  'email', 'password', 'birth_date', 'height', 'weight', 'age', 'sex']
+                  'email', 'password', 'birth_date', 'sex']
         error_messages = {
             'first_name': {
                 'required': 'First name is required'
@@ -39,20 +44,10 @@ class RegisterForm(ModelForm):
             'birth_date': {
                 'required': 'Birth date is required'
             },
-            'height': {
-                'required': 'Height is required'
-            },
-            'weight': {
-                'required': 'Weight is required'
-            },
-            'age': {
-                'required': 'Age is required'
-            },
-            'sex':{
+            'sex': {
                 'required': 'Sex is required'
-                }
             }
-        
+        }
 
     def clean(self):
         cleaned_data = super(RegisterForm, self).clean()
@@ -60,4 +55,27 @@ class RegisterForm(ModelForm):
         # email must be unique
         if User.objects.filter(email=email).exists():
             self.add_error('email', 'That email address is already in use')
+        return cleaned_data
+
+
+class CalculateBMIForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CalculateBMIForm, self).__init__(*args, **kwargs)
+        self.fields['height'].required = True
+        self.fields['weight'].required = True
+
+    class Meta:
+        model = User
+        fields = ['height', 'weight']
+        error_messages = {
+            'height': {
+                'required': 'Height is required'
+            },
+            'weight': {
+                'required': 'Weight is required'
+            },
+        }
+
+    def clean(self):
+        cleaned_data = super(CalculateBMIForm, self).clean()
         return cleaned_data
