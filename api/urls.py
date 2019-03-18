@@ -15,4 +15,5 @@ urlpatterns = [
     path('register', RegisterView.as_view(), name='register'),
     path('user', UserView.as_view(), name='user'),
     path('calculate-bmi', CalculateBMIView.as_view(), name='calculate-bmi'),
+    path('calculate-dci', CalculateDCIView.as_view(), name='calculate-dci'),
 ]

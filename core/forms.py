@@ -79,3 +79,19 @@ class CalculateBMIForm(ModelForm):
     def clean(self):
         cleaned_data = super(CalculateBMIForm, self).clean()
         return cleaned_data
+class CalculateDCIForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CalculateDCIForm, self).__init__(*args, **kwargs)
+        self.fields['useractivity'].required = True
+
+    class Meta:
+        fields = ['useractivity']
+        error_messages = {
+            'useractivity':{
+                'required': 'User Activity is required'
+            }
+        }
+
+    def clean(self):
+        cleaned_data = super(CalculateDCIForm, self).clean()
+        return cleaned_data

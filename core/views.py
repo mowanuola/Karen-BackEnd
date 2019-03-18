@@ -11,6 +11,7 @@ from core.serializers import *
 from django.db.models import Q
 from random import shuffle
 from core.forms import *
+from core.dci import calculateDCI
 
 
 class RegisterView(APIView):
@@ -62,6 +63,25 @@ class CalculateBMIView(APIView):
             weight = form.cleaned_data['weight']
             user.height = int(height)
             user.weight = int(weight)
+            user.save()
+            serializer = UserSerializer(user)
+            return Response(data={'message': "Sucess", 'user': serializer.data})
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class CalculateDCIView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        form = CalculateDCIForm(request.data or None)
+        if form.is_valid():
+            user = request.user
+            useractivity = form.cleaned_data['useractivity']
+            height  = user.height
+            weight  = user.weight
+            age  = user.age
+            sex  = user.sex
+            dci = calculateDCI(height,weight,sex,age,useractivity)
+            user.dci = dci
             user.save()
             serializer = UserSerializer(user)
             return Response(data={'message': "Sucess", 'user': serializer.data})
