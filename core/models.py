@@ -14,6 +14,7 @@ class User(AbstractUser):
     age = computed_property.ComputedIntegerField(
         compute_from='getAge', blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
+    useractivity = models.IntegerField(blank=True, null=True)
     bmi = computed_property.ComputedIntegerField(
         compute_from='getBMI', blank=True, null=True)
     bloodtype = models.CharField(max_length=50, blank=True, null=True, choices=(

@@ -20,11 +20,12 @@ class RegisterForm(ModelForm):
         self.fields['password'].required = True
         self.fields['sex'].required = True
         self.fields['birth_date'].required = True
+        self.fields['bloodtype'].required = True
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username',
-                  'email', 'password', 'birth_date', 'sex']
+                  'email', 'password', 'birth_date', 'sex', 'bloodtype']
         error_messages = {
             'first_name': {
                 'required': 'First name is required'
@@ -46,6 +47,9 @@ class RegisterForm(ModelForm):
             },
             'sex': {
                 'required': 'Sex is required'
+            },
+            'bloodtype': {
+                'required': 'Blood type is required'
             }
         }
 
@@ -85,6 +89,7 @@ class CalculateDCIForm(ModelForm):
         self.fields['useractivity'].required = True
 
     class Meta:
+        model = User
         fields = ['useractivity']
         error_messages = {
             'useractivity':{

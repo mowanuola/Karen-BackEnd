@@ -24,8 +24,9 @@ class RegisterView(APIView):
             last_name = form.cleaned_data['last_name']
             sex = form.cleaned_data['sex']
             birth_date = form.cleaned_data['birth_date']
+            bloodtype = form.cleaned_data['bloodtype']
             user = User(username=username, email=email,
-                        first_name=first_name, last_name=last_name, birth_date=birth_date, sex=sex)
+                        first_name=first_name, last_name=last_name, birth_date=birth_date, sex=sex, bloodtype=bloodtype)
             user.set_password(form.cleaned_data['password'])
             user.save()
             token = Token.objects.create(user=user)
@@ -81,6 +82,7 @@ class CalculateDCIView(APIView):
             age  = user.age
             sex  = user.sex
             dci = calculateDCI(height,weight,sex,age,useractivity)
+            user.useractivity = useractivity
             user.dci = dci
             user.save()
             serializer = UserSerializer(user)
