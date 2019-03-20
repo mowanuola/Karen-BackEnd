@@ -3,3 +3,7 @@ def calculateBMI(height, weight):
     if height and weight:
         BMI = weight / ((height / 100) * (height / 100))
     return BMI
+
+
+def getCalorieThreshold(bmi):
+    return 200

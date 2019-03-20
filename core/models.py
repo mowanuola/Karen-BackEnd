@@ -65,20 +65,12 @@ class Disease(models.Model):
 
 
 class Blacklist(models.Model):
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, related_name='foods',
+                             on_delete=models.CASCADE)
+    disease = models.ForeignKey(
+        Disease, related_name='diseases', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return 'User with {} cannot take {}'.format(self.disease, self.food)
-
-
-class Diagnosis(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return '{} has {}'.format(self.user.username, self.disease)

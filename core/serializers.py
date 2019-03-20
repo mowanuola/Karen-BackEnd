@@ -19,17 +19,20 @@ class FoodSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
 
 
-class BlacklistSerializer(serializers.ModelSerializer):
+class DiseaseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Blacklist
-        fields = ('id', 'food', 'disease',
+        model = Disease
+        fields = ('id', 'name',
                   'created_at', 'updated_at')
         read_only_fields = ('id', 'created_at')
 
 
-class DiagnosisSerializer(serializers.ModelSerializer):
+class BlacklistSerializer(serializers.ModelSerializer):
+    food = FoodSerializer()
+    disease = DiseaseSerializer()
+
     class Meta:
-        model = Diagnosis
-        fields = ('id', 'user', 'disease',
+        model = Blacklist
+        fields = ('id', 'food', 'disease',
                   'created_at', 'updated_at')
         read_only_fields = ('id', 'created_at')
