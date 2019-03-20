@@ -15,4 +15,5 @@ class UserAdmin(DUserAdmin):
 admin.site.register(Food)
 admin.site.register(Diagnosis)
 admin.site.register(Blacklist)
+admin.site.register(Disease)
 admin.site.register(User, UserAdmin)
