@@ -41,13 +41,6 @@ class User(AbstractUser):
 class Food(models.Model):
     name = models.CharField(max_length=50, blank=True)
     calories = models.IntegerField()
-    bloodtype = models.CharField(max_length=50, choices=(
-        ("a", "A"),
-        ("b", "B"),
-        ("ab", "AB"),
-        ("o", "O")
-
-    ))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
