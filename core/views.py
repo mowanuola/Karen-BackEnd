@@ -12,6 +12,8 @@ from django.db.models import Q
 from random import shuffle
 from core.forms import *
 from core.dci import calculateDCI
+from core.helpers import getMostLikelyDisease
+from core.bmi import getCalorieThreshold
 
 
 class RegisterView(APIView):
@@ -69,6 +71,7 @@ class CalculateBMIView(APIView):
             return Response(data={'message': "Sucess", 'user': serializer.data})
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
+
 class CalculateDCIView(APIView):
     permission_classes = (IsAuthenticated, )
 
@@ -77,14 +80,41 @@ class CalculateDCIView(APIView):
         if form.is_valid():
             user = request.user
             useractivity = form.cleaned_data['useractivity']
-            height  = user.height
-            weight  = user.weight
-            age  = user.age
-            sex  = user.sex
-            dci = calculateDCI(height,weight,sex,age,useractivity)
+            height = user.height
+            weight = user.weight
+            age = user.age
+            sex = user.sex
+            dci = calculateDCI(height, weight, sex, age, useractivity)
             user.useractivity = useractivity
             user.dci = dci
             user.save()
             serializer = UserSerializer(user)
-            return Response(data={'message': "Sucess", 'user': serializer.data})
+            return Response(data={'message': "Success", 'user': serializer.data})
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class FoodsView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        user = request.user
+        bloodtype = user.bloodtype
+        bmi = user.bmi
+        most_likely_disease = getMostLikelyDisease(bloodtype)
+        disease = Disease.objects.filter(name=most_likely_disease).first()
+        disease_id = disease.id
+        blacklists = list(Blacklist.objects.filter(
+            disease=disease_id).values_list('food', flat=True))
+        calorie_threshold = getCalorieThreshold(bmi)
+        foods = Food.objects.filter(calories__lt=calorie_threshold)
+        if foods:
+            for blacklist in blacklists:
+                foods = foods.filter(id__icontains=blacklist)
+            if foods:
+                print('Foods: {}'.format(foods))
+                serialized_foods = FoodSerializer(foods,  many=True)
+                return Response(data={'foods': serialized_foods.data})
+            else:
+                return Response(data={'foods': []})
+        else:
+            return Response(data={'foods': []})
