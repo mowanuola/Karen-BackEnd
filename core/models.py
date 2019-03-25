@@ -39,7 +39,8 @@ class User(AbstractUser):
 
 
 class Food(models.Model):
-    name = models.CharField(max_length=50, blank=True)
+    img = models.TextField(blank=True) 
+    name = models.CharField(max_length=50)
     calories = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

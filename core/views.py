@@ -102,19 +102,26 @@ class FoodsView(APIView):
         bmi = user.bmi
         most_likely_disease = getMostLikelyDisease(bloodtype)
         disease = Disease.objects.filter(name=most_likely_disease).first()
-        disease_id = disease.id
-        blacklists = list(Blacklist.objects.filter(
-            disease=disease_id).values_list('food', flat=True))
-        calorie_threshold = getCalorieThreshold(bmi)
-        foods = Food.objects.filter(calories__lt=calorie_threshold)
-        if foods:
-            for blacklist in blacklists:
-                foods = foods.filter(id__icontains=blacklist)
+        if disease:
+            blacklists = list(Blacklist.objects.filter(
+                disease=disease.id).values_list('food', flat=True))
+            calorie_threshold = getCalorieThreshold(bmi)
+            foods = Food.objects.filter(calories__lt=calorie_threshold)
             if foods:
-                print('Foods: {}'.format(foods))
-                serialized_foods = FoodSerializer(foods,  many=True)
-                return Response(data={'foods': serialized_foods.data})
+                for blacklist in blacklists:
+                    foods = foods.exclude(id=blacklist)
+                if foods:
+                    serialized_foods = FoodSerializer(foods,  many=True)
+                    foods = serialized_foods.data
+                    return Response(data={'foods': foods})
+                else:
+                    return Response(data={'foods': []})
             else:
                 return Response(data={'foods': []})
         else:
-            return Response(data={'foods': []})
+           foods = Food.objects.all()
+           if foods:
+                serialized_foods = FoodSerializer(foods,  many=True)
+                return Response(data={'foods': serialized_foods.data})
+           else:
+                return Response(data={'foods': []}) 
