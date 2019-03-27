@@ -6,4 +6,9 @@ def calculateBMI(height, weight):
 
 
 def getCalorieThreshold(bmi):
-    return 200
+    if bmi <= 19: 
+        return 500
+    elif bmi > 19 or bmi <= 25 :
+        return 600
+    elif bmi > 25:
+        return 200
