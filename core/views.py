@@ -36,6 +36,33 @@ class RegisterView(APIView):
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
+class UpdateProfileView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        user = request.user
+        form = UpdateProfileForm(request.data or None)
+        if form.is_valid():
+            username = form.cleaned_data['username'].lower()
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            sex = form.cleaned_data['sex']
+            bloodtype = form.cleaned_data['bloodtype']
+            if username:
+                user.username = username
+            if first_name:
+                user.first_name = first_name
+            if last_name:
+                user.last_name = last_name
+            if sex:
+                user.sex = sex
+            if bloodtype:
+                user.bloodtype = bloodtype
+            user.save()
+            return Response(data={'message': "Profile updated successfully"})
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -111,7 +138,6 @@ class FoodsView(APIView):
             for blacklist in blacklists:
                 foods = foods.filter(id__icontains=blacklist)
             if foods:
-                print('Foods: {}'.format(foods))
                 serialized_foods = FoodSerializer(foods,  many=True)
                 return Response(data={'foods': serialized_foods.data})
             else:

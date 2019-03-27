@@ -62,6 +62,28 @@ class RegisterForm(ModelForm):
         return cleaned_data
 
 
+class UpdateProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileForm, self).__init__(*args, **kwargs)
+        # there's a 'fields' property now
+        self.fields['username'].validators.append(
+            RegexValidator(
+                regex='^[a-zA-Z][a-zA-Z0-9_-]+$',
+                message='Only alphabets, numbers, - and _ are allowed for usernames and your username must start with an alphabet.',
+                code='invalid_username',
+            )
+        )
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username',
+                  'sex', 'bloodtype']
+
+    def clean(self):
+        cleaned_data = super(UpdateProfileForm, self).clean()
+        return cleaned_data
+
+
 class CalculateBMIForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CalculateBMIForm, self).__init__(*args, **kwargs)
@@ -83,6 +105,8 @@ class CalculateBMIForm(ModelForm):
     def clean(self):
         cleaned_data = super(CalculateBMIForm, self).clean()
         return cleaned_data
+
+
 class CalculateDCIForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CalculateDCIForm, self).__init__(*args, **kwargs)
@@ -92,7 +116,7 @@ class CalculateDCIForm(ModelForm):
         model = User
         fields = ['useractivity']
         error_messages = {
-            'useractivity':{
+            'useractivity': {
                 'required': 'User Activity is required'
             }
         }
