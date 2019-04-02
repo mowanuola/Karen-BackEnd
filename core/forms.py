@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
 from .models import User
 
 
@@ -14,6 +14,21 @@ class RegisterForm(ModelForm):
                 code='invalid_username',
             )
         )
+        self.fields['first_name'].validators.append(
+            RegexValidator(
+                regex='^[a-zA-Z]',
+                message='Only alphabets, numbers, - and _ are allowed for usernames and your username must start with an alphabet.',
+                code='invalid_firstname',
+            )
+        )
+        self.fields['last_name'].validators.append(
+            RegexValidator(
+                regex='^[a-zA-Z]',
+                message='Only alphabets, numbers, - and _ are allowed for usernames and your username must start with an alphabet.',
+                code='invalid_lastname',
+            )
+        )
+       
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
         self.fields['username'].required = True
@@ -66,22 +81,16 @@ class UpdateProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(UpdateProfileForm, self).__init__(*args, **kwargs)
         # there's a 'fields' property now
-        self.fields['username'].validators.append(
-            RegexValidator(
-                regex='^[a-zA-Z][a-zA-Z0-9_-]+$',
-                message='Only alphabets, numbers, - and _ are allowed for usernames and your username must start with an alphabet.',
-                code='invalid_username',
-            )
-        )
-
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username',
+        fields = ['first_name', 'last_name',
                   'sex', 'bloodtype']
 
     def clean(self):
         cleaned_data = super(UpdateProfileForm, self).clean()
         return cleaned_data
+    
+       
 
 
 class CalculateBMIForm(ModelForm):

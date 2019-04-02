@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 diseases = ["Breast Cancer", "High Blood Pressure",
             "High Cholesterol", "Hepatitis B"]
@@ -23,3 +24,5 @@ def calculateAge(birth_date):
         return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     except:
         return 0
+
+
