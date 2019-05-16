@@ -8,23 +8,23 @@ from core.helpers import calculate_age
 
 
 class User(AbstractUser):
-    height = models.IntegerField(null=True)
-    weight = models.IntegerField(null=True)
+    height = models.IntegerField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
     sex = models.CharField(max_length=50)
     age = computed_property.ComputedIntegerField(
-        compute_from='get_age', null=True)
-    birth_date = models.DateField(null=True)
-    useractivity = models.IntegerField(null=True)
+        compute_from='get_age', blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    useractivity = models.IntegerField(blank=True, null=True)
     bmi = computed_property.ComputedIntegerField(
-        compute_from='get_bmi', null=True)
-    bloodtype = models.CharField(max_length=50, null=True, choices=(
+        compute_from='get_bmi', blank=True, null=True)
+    bloodtype = models.CharField(max_length=50, blank=True, null=True, choices=(
         ("a", "A"),
         ("b", "B"),
         ("ab", "AB"),
         ("o", "O")
 
     ))
-    dci = models.IntegerField(null=True)
+    dci = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -39,8 +39,8 @@ class User(AbstractUser):
 
 
 class Food(models.Model):
-    img = models.TextField(blank=True) 
     name = models.CharField(max_length=50)
+    img = models.TextField(blank=True, null=True) 
     calories = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -50,7 +50,7 @@ class Food(models.Model):
 
 
 class Disease(models.Model):
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
