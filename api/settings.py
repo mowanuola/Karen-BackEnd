@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(int(os.getenv('DEBUG', False)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PRODUCTION = bool(int(os.getenv('PRODUCTION', False)))
+PRODUCTION = bool(int(os.getenv('PRODUCTION', True)))
 
 ALLOWED_HOSTS = ['*']
 
