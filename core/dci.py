@@ -1,4 +1,4 @@
-def calculateDCI(height, weight, sex, age, useractivity ):
+def calculate_dci(height, weight, sex, age, useractivity ):
     BMR = 0
     DCI = 0
     if height and weight and age:    

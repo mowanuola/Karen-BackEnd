@@ -11,8 +11,8 @@ from core.serializers import *
 from django.db.models import Q
 from random import shuffle
 from core.forms import *
-from core.dci import calculateDCI
-from core.helpers import getMostLikelyDisease
+from core.dci import calculate_dci
+from core.helpers import get_most_likely_disease
 from core.bmi import getCalorieThreshold
 
 
@@ -83,7 +83,7 @@ class CalculateBMIView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def put(self, request):
-        form = CalculateBMIForm(request.data or None)
+        form = calculate_bmiForm(request.data or None)
         if form.is_valid():
             user = request.user
             height = form.cleaned_data['height']
@@ -100,7 +100,7 @@ class CalculateDCIView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def put(self, request):
-        form = CalculateDCIForm(request.data or None)
+        form = calculate_dciForm(request.data or None)
         if form.is_valid():
             user = request.user
             useractivity = form.cleaned_data['useractivity']
@@ -108,7 +108,7 @@ class CalculateDCIView(APIView):
             weight = user.weight
             age = user.age
             sex = user.sex
-            dci = calculateDCI(height, weight, sex, age, useractivity)
+            dci = calculate_dci(height, weight, sex, age, useractivity)
             user.useractivity = useractivity
             user.dci = dci
             user.save()
@@ -124,7 +124,7 @@ class FoodsView(APIView):
         user = request.user
         bloodtype = user.bloodtype
         bmi = user.bmi
-        most_likely_disease = getMostLikelyDisease(bloodtype)
+        most_likely_disease = get_most_likely_disease(bloodtype)
         disease = Disease.objects.filter(name=most_likely_disease).first()
         if disease:
             blacklists = list(Blacklist.objects.filter(

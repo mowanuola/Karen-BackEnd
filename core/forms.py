@@ -93,9 +93,9 @@ class UpdateProfileForm(ModelForm):
        
 
 
-class CalculateBMIForm(ModelForm):
+class calculate_bmiForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(CalculateBMIForm, self).__init__(*args, **kwargs)
+        super(calculate_bmiForm, self).__init__(*args, **kwargs)
         self.fields['height'].required = True
         self.fields['weight'].required = True
 
@@ -112,13 +112,13 @@ class CalculateBMIForm(ModelForm):
         }
 
     def clean(self):
-        cleaned_data = super(CalculateBMIForm, self).clean()
+        cleaned_data = super(calculate_bmiForm, self).clean()
         return cleaned_data
 
 
-class CalculateDCIForm(ModelForm):
+class calculate_dciForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(CalculateDCIForm, self).__init__(*args, **kwargs)
+        super(calculate_dciForm, self).__init__(*args, **kwargs)
         self.fields['useractivity'].required = True
 
     class Meta:
@@ -131,5 +131,5 @@ class CalculateDCIForm(ModelForm):
         }
 
     def clean(self):
-        cleaned_data = super(CalculateDCIForm, self).clean()
+        cleaned_data = super(calculate_dciForm, self).clean()
         return cleaned_data

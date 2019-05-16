@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='bmi',
-            field=computed_property.fields.ComputedIntegerField(blank=True, compute_from='getBMI', editable=False, null=True),
+            field=computed_property.fields.ComputedIntegerField(blank=True, compute_from='get_bmi', editable=False, null=True),
         ),
     ]

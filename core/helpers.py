@@ -12,13 +12,13 @@ fuzzyDict = {
 }
 
 
-def getMostLikelyDisease(bloodtype):
+def get_most_likely_disease(bloodtype):
     mostLikely = max(fuzzyDict[bloodtype])
     disease = diseases[fuzzyDict[bloodtype].index(mostLikely)]
     return disease
 
 
-def calculateAge(birth_date):
+def calculate_age(birth_date):
     try:
         today = date.today()
         return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))

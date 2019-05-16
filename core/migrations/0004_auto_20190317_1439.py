@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='age',
-            field=computed_property.fields.ComputedIntegerField(blank=True, compute_from='getAge', editable=False, null=True),
+            field=computed_property.fields.ComputedIntegerField(blank=True, compute_from='get_age', editable=False, null=True),
         ),
     ]

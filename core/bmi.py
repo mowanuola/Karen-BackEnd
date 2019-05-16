@@ -1,4 +1,4 @@
-def calculateBMI(height, weight):
+def calculate_bmi(height, weight):
     BMI = 0
     
     if height and weight:
